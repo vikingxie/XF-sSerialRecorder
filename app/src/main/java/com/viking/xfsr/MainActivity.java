@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     mRxDataBuf.append(rx_str);
 
                     mEditTextRxData.setText(mRxDataBuf);
+                    mEditTextRxData.setSelection(mEditTextRxData.getText().length(), mEditTextRxData.getText().length());
                     break;
                 default:
                     super.handleMessage(msg);
@@ -152,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mEditTextRxData = (EditText) findViewById(R.id.editTextRxData);
+        mEditTextRxData.setMovementMethod(ScrollingMovementMethod.getInstance());
+
         mTextViewRxCount = (TextView) findViewById(R.id.textViewRxCount);
         mTextViewDevice = (TextView) findViewById(R.id.textViewDevice);
 
