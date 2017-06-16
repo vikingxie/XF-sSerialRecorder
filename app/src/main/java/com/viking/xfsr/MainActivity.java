@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
         private BufferedOutputStream recordFile() {
             //String date = SimpleDateFormat.getDateTimeInstance().format(new Date());
-            String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String date = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
             try {
                 return new BufferedOutputStream(new FileOutputStream(new File(recordDir(), date + ".txt")));
