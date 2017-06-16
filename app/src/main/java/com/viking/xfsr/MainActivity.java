@@ -26,7 +26,6 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.HexDump;
-import com.hoho.android.usbserial.util.SerialInputOutputManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -34,14 +33,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -115,32 +110,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int mRxCount = 0;
-    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-    private SerialInputOutputManager mSerialIoManager = null;
-    private final SerialInputOutputManager.Listener mListener =  new SerialInputOutputManager.Listener() {
-
-        @Override
-        public void onRunError(Exception e) {
-            Toast.makeText(getApplicationContext(), R.string.runner_stopped, Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onNewData(final byte[] data) {
-            /*
-            SerialConsoleActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    SerialConsoleActivity.this.updateReceivedData(data);
-                }
-            });
-            */
-            mRxCount += data.length;
-            //TODO; Save and show data
-
-            mTextViewRxCount.setText(String.format(getString(R.string.rx_template), mRxCount));
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,20 +132,11 @@ public class MainActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                //TODO: Check USB is connected
                 if (mRecordTask == null) {
                     mHandler.sendEmptyMessageDelayed(MESSAGE_START_RECORD, RECORD_TIMEOUT_MILLIS);
                 } else {
                     mHandler.sendEmptyMessageDelayed(MESSAGE_STOP_RECORD, RECORD_TIMEOUT_MILLIS);
                 }
-
-//                if (mSerialIoManager == null && startRecord()) {
-//                    mFab.setImageDrawable(getDrawable(R.drawable.ic_stop));
-//                } else {
-//                    stopRecord();
-//                    mFab.setImageDrawable(getDrawable(R.drawable.ic_play));
-//                }
             }
         });
 
@@ -284,72 +244,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private boolean startRecord() {
-//        if (mSerialPort == null) {
-//            Toast.makeText(getApplicationContext(), R.string.device_not_connect, Toast.LENGTH_LONG).show();
-//            return false;
-//        }
-//
-//        UsbDeviceConnection connection = mUsbManager.openDevice(mSerialPort.getDriver().getDevice());
-//        if (connection == null) {
-//            Toast.makeText(getApplicationContext(), R.string.open_device_failed, Toast.LENGTH_LONG).show();
-//            return false;
-//        }
-//
-//        mEditTextRxData.setText("");
-//
-//        try {
-//            mSerialPort.open(connection);
-//            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//
-//            mEditTextRxData.append(String.format("%s %s %s",
-//                    preference.getString(getString(R.string.pref_key_baudrate), "115200xxx"),
-//                    preference.getString(getString(R.string.pref_key_stopbit), "1xxx"),
-//                    preference.getString(getString(R.string.pref_key_parity), "0xxx")));
-//
-//            int baudrate = Integer.parseInt(preference.getString(getString(R.string.pref_key_baudrate), "115200"));
-//            int stopbit = Integer.parseInt(preference.getString(getString(R.string.pref_key_stopbit), "1"));
-//            int parity = Integer.parseInt(preference.getString(getString(R.string.pref_key_parity), "0"));
-//            mSerialPort.setParameters(baudrate, 8, stopbit, parity);
-//
-//        } catch (IOException e) {
-//            Toast.makeText(getApplicationContext(), String.format(getString(R.string.error_opening_device), e.getMessage()), Toast.LENGTH_SHORT).show();
-//            try {
-//                mSerialPort.close();
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            }
-//            return false;
-//        } catch (Exception e1) {
-//            mEditTextRxData.append(e1.getMessage());
-//            return false;
-//        }
-//
-//        //TODO: Open file
-//        mRxCount = 0;
-//        mSerialIoManager = new SerialInputOutputManager(mSerialPort, mListener);
-//        mExecutor.submit(mSerialIoManager);
-//
-//        return true;
-//    }
-//
-//    private void stopRecord() {
-//        if (mSerialIoManager == null) {
-//            return;
-//        }
-//
-//        mSerialIoManager.stop();
-//        mSerialIoManager = null;
-//
-//        if (mSerialPort != null) {
-//            try {
-//                mSerialPort.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     private class RecordTask extends AsyncTask<Void, Void, Void> {
         private boolean running = false;
         private int count = 0;
@@ -385,9 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Message msg = new Message();
                         Bundle bundle = new Bundle();
-                        //bundle.putCharArray(MSG_RX_DATA_KEY, getChars(mReadBuffer, len));
                         bundle.putByteArray(MSG_RX_DATA_KEY, rx_data);
-                        //bundle.putString(MSG_RX_FILE_KEY, record_file.toString());
                         msg.what = MESSAGE_REFRESH_RX_DATA;
                         msg.arg1 = count;
                         msg.setData(bundle);
