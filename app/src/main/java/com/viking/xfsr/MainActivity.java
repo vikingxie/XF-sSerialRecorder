@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             int parity = Integer.parseInt(preference.getString(getString(R.string.pref_key_parity), "0"));
             mSerialPort.setParameters(baudrate, databit, stopbit, parity);
         } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), String.format(getString(R.string.error_opening_device), e.getMessage()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), String.format(getString(R.string.error_opening_device), e.getMessage()), Toast.LENGTH_LONG).show();
             try {
                 mSerialPort.close();
             } catch (IOException e1) {
