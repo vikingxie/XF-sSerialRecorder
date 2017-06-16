@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XF的串口记录器</string>
+    <string name="action_settings">设置</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="serial">串口</string>
+    <string name="rx">接收:</string>
+    <string name="rx_template">接收:%dB</string>
+    <string name="device_not_connect">设备未连接</string>
+    <string name="open_device_failed">打开设备错误</string>
+    <string name="error_opening_device">打开设备错误: %s</string>
+    <string name="runner_stopped">运行停止</string>
+
+    <string name="pref_header_serial">串口</string>
+
+    <string name="pref_title_baudrate">波特率</string>
+
+    <string name="pref_title_parity">校验</string>
+    <string-array name="pref_parity_list_titles">
+        <item>无</item>
+        <item>奇校验</item>
+        <item>偶校验</item>
+    </string-array>
+
+    <string name="pref_title_stopbit">停止位</string>
+    <string-array name="pref_stopbit_list_titles">
+        <item>1位</item>
+        <item>2位</item>
+    </string-array>
+
+    <string name="pref_title_databit">数据位</string>
+    <string-array name="pref_databit_list_titles">
+        <item>5位</item>
+        <item>6位</item>
+        <item>7位</item>
+        <item>8位</item>
+    </string-array>
+
+    <string name="pref_header_file">文件</string>
+
+    <string name="pref_title_record_to_file">记录到文件</string>
+    <string name="pref_description_record_to_file">保存接收数据到文件</string>
+
+</resources>
