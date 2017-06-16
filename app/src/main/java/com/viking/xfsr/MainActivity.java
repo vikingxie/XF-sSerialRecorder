@@ -241,12 +241,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int openPort() {
-        UsbDeviceConnection connection = null;
-
-        if (mSerialPort == null
-                || (connection = mUsbManager.openDevice(mSerialPort.getDriver().getDevice())) == null) {
+        if (mSerialPort == null) {
+            Toast.makeText(getApplicationContext(), R.string.device_not_connect, Toast.LENGTH_LONG).show();
             return -1;
         }
+
+        UsbDeviceConnection connection = mUsbManager.openDevice(mSerialPort.getDriver().getDevice());
+        if (connection == null) {
+            Toast.makeText(getApplicationContext(), R.string.open_device_failed, Toast.LENGTH_LONG).show();
+            return -2;
+        }
+
 
         try {
             mSerialPort.open(connection);
@@ -263,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            return -2;
+            return -3;
         }
 
         return 0;
