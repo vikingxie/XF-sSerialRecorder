@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_record_to_file"
+        android:summary="@string/pref_description_record_to_file"
+        android:title="@string/pref_title_record_to_file" />
+
+</PreferenceScreen>

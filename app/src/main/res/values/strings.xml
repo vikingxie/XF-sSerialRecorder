@@ -58,6 +58,12 @@
     </string-array>
     <string name="pref_key_databit">pref_key_databit</string>
 
+    <!-- File settings -->
+    <string name="pref_header_file">File</string>
+
+    <string name="pref_title_record_to_file">Record to file</string>
+    <string name="pref_description_record_to_file">Save received data to file</string>
+    <string name="pref_key_record_to_file">pref_key_record_to_file</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

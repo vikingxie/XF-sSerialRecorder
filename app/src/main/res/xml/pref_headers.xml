@@ -5,7 +5,12 @@
     <header
         android:fragment="com.viking.xfsr.SettingsActivity$SerialPreferenceFragment"
         android:icon="@drawable/ic_serial"
-        android:title="@string/serial" />
+        android:title="@string/pref_header_serial" />
+
+    <header
+        android:fragment="com.viking.xfsr.SettingsActivity$FilePreferenceFragment"
+        android:icon="@drawable/ic_file"
+        android:title="@string/pref_header_file" />
 
     <!--header
         android:fragment="com.viking.xfsr.SettingsActivity$GeneralPreferenceFragment"
