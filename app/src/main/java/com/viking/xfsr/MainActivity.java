@@ -185,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         mHandler.sendEmptyMessage(MESSAGE_STOP_RECORD);
-        super.onStop();
+        super.onDestroy();
     }
 
     private void getSerialPorts()
