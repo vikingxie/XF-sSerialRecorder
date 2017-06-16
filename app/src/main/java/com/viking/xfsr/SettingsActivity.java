@@ -18,7 +18,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import java.util.List;
