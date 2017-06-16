@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private static final long RECORD_TIMEOUT_MILLIS = 250;
 
     private static final String MSG_RX_DATA_KEY = "rx_data";
-    private static final String MSG_RX_FILE_KEY = "rx_file";
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -109,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-    private int mRxCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         mReadBuffer.get(rx_data, 0, len);
                         mReadBuffer.clear();
 
-                        //TODO: Save data
+                        // Save data
                         record_file.write(rx_data);
 
                         Message msg = new Message();
@@ -327,16 +324,5 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
-
-//        private char[] getChars(ByteBuffer bytes, int length) {
-//            Charset cs = Charset.forName("UTF-8");
-//            ByteBuffer bb = ByteBuffer.allocate(length);
-//            bb.put(bytes);
-//            bb.flip();
-//            CharBuffer cb = cs.decode(bb);
-//            return cb.array();
-//        }
-
-
     }
 }
