@@ -360,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             if (openPort() != 0 || (record_file = recordFile()) == null) {
                 mHandler.sendEmptyMessageDelayed(MESSAGE_STOP_RECORD, RECORD_TIMEOUT_MILLIS);
+                return;
             }
 
             mTextViewRxCount.setText(R.string.rx);
