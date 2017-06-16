@@ -308,7 +308,9 @@ public class MainActivity extends AppCompatActivity {
         private File recordDir() {
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "SerialRecord");
             if (!dir.exists()) {
-                dir.mkdir();
+                if (!dir.mkdir()) {
+                    Toast.makeText(getApplicationContext(), R.string.create_record_dir_fail, Toast.LENGTH_LONG).show();
+                }
             }
             return dir;
         }

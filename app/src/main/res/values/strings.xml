@@ -9,6 +9,7 @@
     <string name="open_device_failed">Open device failed</string>
     <string name="error_opening_device">Error opening device: %s</string>
     <string name="runner_stopped">Runner stopped</string>
+    <string name="create_record_dir_fail">Create record dir failed</string>
 
     <!-- Strings related to Settings -->
 
