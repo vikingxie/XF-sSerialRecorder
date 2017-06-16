@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'xfsr'
+            keyPassword '820223xf'
+            storeFile file('C:/Users/Administrator.NS80010972/AndroidStudioProjects/XF\'sSerialRecorder/keystore.jks')
+            storePassword '820223xf'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
@@ -15,9 +23,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            proguardFile 'C:/Users/Administrator.NS80010972/AndroidStudioProjects/XF\'sSerialRecorder/app/proguard-rules.pro'
         }
     }
     productFlavors {
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            //output.outputFile = new File(output.outputFile.parent, defaultConfig.applicationId + "-" + buildType.name + "-v" +
+            //        defaultConfig.versionName + "-" + defaultConfig.versionCode + ".apk" );
+            output.outputFile = new File(output.outputFile.parent, "XF'sSerialRecorder" + "-" + buildType.name + "-v" +
+                    defaultConfig.versionName + "-" + defaultConfig.versionCode + ".apk" );
+
+        }
     }
 }
 
