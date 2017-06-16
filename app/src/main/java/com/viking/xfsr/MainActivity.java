@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextViewDevice;
     private FloatingActionButton mFab;
     private RecordTask mRecordTask = null;
-    private StringBuffer mRxDataBuf = new StringBuffer(100000);
+    private StringBuffer mRxDataBuf = new StringBuffer(4000);
 
     private static final int MESSAGE_REFRESH = 101;
     private static final int MESSAGE_FORCE_REFRESH = 102;
