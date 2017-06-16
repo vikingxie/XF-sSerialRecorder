@@ -1,7 +1,9 @@
 package com.viking.xfsr;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
@@ -52,9 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private StringBuffer mRxDataBuf = new StringBuffer(100000);
 
     private static final int MESSAGE_REFRESH = 101;
-    private static final int MESSAGE_START_RECORD = 102;
-    private static final int MESSAGE_STOP_RECORD = 103;
-    private static final int MESSAGE_REFRESH_RX_DATA = 104;
+    private static final int MESSAGE_FORCE_REFRESH = 102;
+    private static final int MESSAGE_START_RECORD = 103;
+    private static final int MESSAGE_STOP_RECORD = 104;
+    private static final int MESSAGE_REFRESH_RX_DATA = 105;
+    private static final int MESSAGE_EXIT = 106;
 
     private static final long REFRESH_TIMEOUT_MILLIS = 5000;
     private static final long RECORD_TIMEOUT_MILLIS = 250;
@@ -66,10 +70,12 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_REFRESH:
-                    if (mSerialPort == null) {
-                        getSerialPorts();
-                        mHandler.sendEmptyMessageDelayed(MESSAGE_REFRESH, REFRESH_TIMEOUT_MILLIS);
+                    if (mSerialPort != null) {
+                        break;
                     }
+                case MESSAGE_FORCE_REFRESH:
+                    getSerialPorts();
+                    mHandler.sendEmptyMessageDelayed(MESSAGE_REFRESH, REFRESH_TIMEOUT_MILLIS);
                     break;
                 case MESSAGE_START_RECORD:
                     if (mRecordTask == null) {
@@ -102,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
                     mEditTextRxData.setText(mRxDataBuf);
                     mEditTextRxData.setSelection(mEditTextRxData.getText().length(), mEditTextRxData.getText().length());
                     break;
+                case MESSAGE_EXIT:
+                    finish();
+                    break;
                 default:
                     super.handleMessage(msg);
                     break;
@@ -116,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        registerUSBReceiver();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
@@ -195,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
             mSerialPort = mSerialPorts.get(0);
             //Toast.makeText(getApplicationContext(), mSerialPort.toString(), Toast.LENGTH_LONG).show();
             mTextViewDevice.setText(String.format("%s %s", mSerialPort.getClass().getSimpleName(), mSerialPort.getDriver().getDevice().getDeviceId()));
+        } else {
+            mSerialPort = null;
+            mTextViewDevice.setText(getString(R.string.device_not_connect));
         }
     }
 
@@ -209,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.open_device_failed, Toast.LENGTH_LONG).show();
             return -2;
         }
-
 
         try {
             mSerialPort.open(connection);
@@ -327,4 +338,44 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    //public void onDevicePluged() {
+    //    //mHandler.sendEmptyMessage(MESSAGE_FORCE_REFRESH);
+    //    Intent intent = getIntent();
+    //    overridePendingTransition(0, 0);
+    //    //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+    //    finish();
+    //    overridePendingTransition(0, 0);
+    //    startActivity(intent);
+    //}
+
+    public void onDeviceUnpluged() {
+        mHandler.sendEmptyMessage(MESSAGE_STOP_RECORD);
+
+        //mHandler.sendEmptyMessageDelayed(MESSAGE_FORCE_REFRESH, 300);
+        mHandler.sendEmptyMessageDelayed(MESSAGE_EXIT, 300);
+    }
+
+    private final BroadcastReceiver mUSBReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            //if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
+            //    Toast.makeText(context, "插入", Toast.LENGTH_LONG).show();
+            //}
+            if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+                Toast.makeText(context, R.string.device_unplugged, Toast.LENGTH_LONG).show();
+                onDeviceUnpluged();
+            }
+        }
+    };
+
+    private void registerUSBReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        //intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        //intentFilter.addDataScheme("file");
+        registerReceiver(mUSBReceiver, intentFilter);
+    }
+
 }
