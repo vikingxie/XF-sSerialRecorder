@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
     //    startActivity(intent);
     //}
 
-    public void onDeviceUnpluged() {
+    public void onDeviceUnplugged() {
         mHandler.sendEmptyMessage(MESSAGE_STOP_RECORD);
 
         //mHandler.sendEmptyMessageDelayed(MESSAGE_FORCE_REFRESH, 300);
@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
             //}
             if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
                 Toast.makeText(context, R.string.device_unplugged, Toast.LENGTH_LONG).show();
-                onDeviceUnpluged();
+                onDeviceUnplugged();
             }
         }
     };
