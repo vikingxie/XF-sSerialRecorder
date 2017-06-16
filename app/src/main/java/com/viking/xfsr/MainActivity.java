@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        //stopRecord();
+        mHandler.sendEmptyMessage(MESSAGE_STOP_RECORD);
         super.onStop();
     }
 
