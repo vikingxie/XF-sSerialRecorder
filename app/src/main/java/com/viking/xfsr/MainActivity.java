@@ -255,13 +255,15 @@ public class MainActivity extends AppCompatActivity {
 
     private class RecordTask extends AsyncTask<Void, Void, Void> {
         private boolean running = false;
+        private boolean record_to_file = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(getString(R.string.pref_key_record_to_file), true);
         private int count = 0;
         private final ByteBuffer mReadBuffer = ByteBuffer.allocate(100000);
         private BufferedOutputStream record_file = null;
 
         @Override
         protected void onPreExecute() {
-            if (openPort() != 0 || (record_file = recordFile()) == null) {
+            if (openPort() != 0
+                    || (record_to_file && (record_file = recordFile()) == null)) {
                 mHandler.sendEmptyMessageDelayed(MESSAGE_STOP_RECORD, RECORD_TIMEOUT_MILLIS);
                 return;
             }
@@ -284,7 +286,9 @@ public class MainActivity extends AppCompatActivity {
                         mReadBuffer.clear();
 
                         // Save data
-                        record_file.write(rx_data);
+                        if (record_to_file) {
+                            record_file.write(rx_data);
+                        }
 
                         Message msg = new Message();
                         Bundle bundle = new Bundle();
@@ -304,7 +308,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             try {
-                record_file.close();
+                if (record_to_file) {
+                    record_file.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
