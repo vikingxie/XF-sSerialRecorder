@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextViewDevice;
     private FloatingActionButton mFab;
     private RecordTask mRecordTask = null;
-    private StringBuffer mRxDataBuf = new StringBuffer(4000);
 
     private static final int MESSAGE_REFRESH = 101;
     private static final int MESSAGE_FORCE_REFRESH = 102;
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String MSG_RX_DATA_KEY = "rx_data";
 
     private final Handler mHandler = new Handler() {
+        private StringBuffer mRxDataBuf = new StringBuffer(4000);
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -79,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case MESSAGE_START_RECORD:
                     if (mRecordTask == null) {
+                        mTextViewRxCount.setText(R.string.rx);
+
+                        mRxDataBuf.delete(0, mRxDataBuf.length());
+                        mEditTextRxData.setText(mRxDataBuf);
+
                         mRecordTask = new RecordTask();
                         mRecordTask.execute((Void) null);
                     }
@@ -268,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            mTextViewRxCount.setText(R.string.rx);
             mFab.setImageDrawable(getDrawable(R.drawable.ic_stop));
             running = true;
         }
