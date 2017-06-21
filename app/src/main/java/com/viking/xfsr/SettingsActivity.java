@@ -2,6 +2,7 @@ package com.viking.xfsr;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,12 +14,14 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -180,11 +183,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class FilePreferenceFragment extends PreferenceFragment {
+        static final int REQ_CHOOSE_DIR = 100;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_file);
-            setHasOptionsMenu(true);
+            //setHasOptionsMenu(true);
+
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_file_dir)));
         }
 
         @Override
@@ -196,5 +203,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+
+//        @Override
+//        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+//            if (preference == findPreference("pref_key_file_dir")) {
+//
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("*/*");
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intent, REQ_CHOOSE_DIR);
+//                return true;
+//            }
+//            return super.onPreferenceTreeClick(preferenceScreen, preference);
+//        }
+//
+//        @Override
+//        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//            if (requestCode == REQ_CHOOSE_DIR && resultCode == Activity.RESULT_OK) {
+//                Toast.makeText(this.getActivity(), data.getData().getPath(), Toast.LENGTH_LONG).show();
+//            }
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
     }
 }

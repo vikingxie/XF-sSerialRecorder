@@ -67,4 +67,7 @@
     <string name="pref_description_record_to_file">Save received data to file</string>
     <string name="pref_key_record_to_file">pref_key_record_to_file</string>
 
+    <string name="pref_title_file_dir">File dir</string>
+    <string name="pref_default_file_dir">SerialRecord</string>
+    <string name="pref_key_file_dir">pref_key_file_dir</string>
 </resources>

@@ -3,6 +3,7 @@
     package="com.viking.xfsr">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.HARDWARE_TEST" />
 
     <uses-feature android:name="android.hardware.usb.host" />

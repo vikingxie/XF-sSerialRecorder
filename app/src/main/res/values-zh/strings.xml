@@ -43,4 +43,6 @@
     <string name="pref_title_record_to_file">记录到文件</string>
     <string name="pref_description_record_to_file">保存接收数据到文件</string>
 
+    <string name="pref_title_file_dir">文件目录</string>
+
 </resources>
