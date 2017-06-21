@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
             String path = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(getString(R.string.pref_key_file_dir), getString(R.string.pref_default_file_dir));
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), path);
             if (!dir.exists()) {
-                if (!dir.mkdir()) {
+                if (!dir.mkdirs()) {
                     Toast.makeText(getApplicationContext(), R.string.create_record_dir_fail, Toast.LENGTH_LONG).show();
                 }
             }
