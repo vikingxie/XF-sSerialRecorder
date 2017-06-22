@@ -11,6 +11,11 @@
     <string name="runner_stopped">Runner stopped</string>
     <string name="device_unplugged">Device unplugged</string>
     <string name="create_record_dir_fail">Create record dir failed</string>
+    <string name="title_activity_choose_directory">ChooseDirectory</string>
+    <string name="back_parent">Back</string>
+    <string name="choose_directory">Select</string>
+    <string name="refresh">Refresh</string>
+    <string name="create">Create</string>
 
     <!-- Strings related to Settings -->
 

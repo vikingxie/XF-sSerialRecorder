@@ -12,7 +12,15 @@
     <string name="runner_stopped">运行停止</string>
     <string name="device_unplugged">设备拔出</string>
     <string name="create_record_dir_fail">创建记录目录失败</string>
+    <string name="title_activity_choose_directory">选择目录</string>
+    <string name="back_parent">返回</string>
+    <string name="choose_directory">选择</string>
+    <string name="refresh">刷新</string>
+    <string name="create">新建目录</string>
 
+    <!-- Strings related to Settings -->
+
+    <!-- Serial settings -->
     <string name="pref_header_serial">串口</string>
 
     <string name="pref_title_baudrate">波特率</string>
@@ -38,11 +46,11 @@
         <item>8位</item>
     </string-array>
 
+    <!-- File settings -->
     <string name="pref_header_file">文件</string>
 
     <string name="pref_title_record_to_file">记录到文件</string>
     <string name="pref_description_record_to_file">保存接收数据到文件</string>
 
     <string name="pref_title_file_dir">文件目录</string>
-
 </resources>
