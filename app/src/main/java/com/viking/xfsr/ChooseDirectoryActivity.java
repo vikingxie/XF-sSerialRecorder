@@ -1,11 +1,13 @@
 package com.viking.xfsr;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -39,6 +41,7 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
     private File[] mFilesInDirectory = null;
     private File mSelectedDirectory = null;
     private TextView mCurrentDirectory = null;
+    private FileObserver mFileObserver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,10 +125,7 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_refresh:
-                // Refresh current directory
-                if (mSelectedDirectory != null) {
-                    changeDirectory(mSelectedDirectory);
-                }
+                refreshDirectory();
                 break;
 
             case R.id.action_create:
@@ -139,9 +139,32 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFileObserver != null) {
+            mFileObserver.stopWatching();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFileObserver != null) {
+            mFileObserver.startWatching();
+        }
+    }
+
     private boolean isValidFile(final File file) {
         return (file != null && file.isDirectory() && file.canRead() && file.canWrite());
     }
+
+    private void refreshDirectory() {
+        if (mSelectedDirectory != null) {
+            changeDirectory(mSelectedDirectory);
+        }
+    }
+
 
     private void changeDirectory(final File dir) {
         if (dir != null && dir.isDirectory()) {
@@ -167,8 +190,8 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
                 mSelectedDirectory = dir;
                 mCurrentDirectory.setText(dir.getAbsolutePath());
                 mListDirectoriesAdapter.notifyDataSetChanged();
-                //mFileObserver = createFileObserver(dir.getAbsolutePath());
-                //mFileObserver.startWatching();
+                mFileObserver = createFileObserver(dir.getAbsolutePath());
+                mFileObserver.startWatching();
             }
         }
     }
@@ -247,6 +270,22 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
         } else {
             return R.string.create_folder_fail;
         }
+    }
+
+    private FileObserver createFileObserver(final String path) {
+        return new FileObserver(path, FileObserver.CREATE | FileObserver.DELETE
+                | FileObserver.MOVED_FROM | FileObserver.MOVED_TO) {
+
+            @Override
+            public void onEvent(final int event, final String path) {
+                ChooseDirectoryActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshDirectory();
+                    }
+                });
+            }
+        };
     }
 
 }
