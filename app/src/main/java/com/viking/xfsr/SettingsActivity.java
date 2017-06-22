@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import static com.viking.xfsr.ChooseDirectoryActivity.KEY_DIRECTORY;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -202,6 +204,24 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            if (preference == findPreference("pref_key_file_dir")) {
+                Intent intent = new Intent(getActivity(), ChooseDirectoryActivity.class);
+                startActivityForResult(intent, REQ_CHOOSE_DIR);
+                return true;
+            }
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQ_CHOOSE_DIR && resultCode == Activity.RESULT_OK) {
+                Toast.makeText(this.getActivity(), data.getStringExtra(KEY_DIRECTORY), Toast.LENGTH_LONG).show();
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
 
 //        @Override
