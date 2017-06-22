@@ -40,7 +40,7 @@ import static com.viking.xfsr.ChooseDirectoryActivity.KEY_DIRECTORY;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String INVALID_PATH_NAME = "~!@#$%^&*()";
-    public static final String DEFAULT_PATH_NAME = "SerialReord";
+    public static final String DEFAULT_PATH_NAME = "SerialRecord";
 
     /**
      * A preference value change listener that updates the preference's summary
