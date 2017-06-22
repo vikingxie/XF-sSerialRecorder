@@ -1,5 +1,8 @@
 package com.viking.xfsr;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -8,12 +11,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,7 +129,7 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_create:
-                //TODO: Create new directory
+                openNewFolderDialog();
                 break;
 
             default:
@@ -164,6 +170,82 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
                 //mFileObserver = createFileObserver(dir.getAbsolutePath());
                 //mFileObserver.startWatching();
             }
+        }
+    }
+
+    private void openNewFolderDialog() {
+        @SuppressLint("InflateParams")
+        final View dialogView = getLayoutInflater().inflate(
+                R.layout.dialog_new_folder, null);
+        //final TextView msgView = (TextView) dialogView.findViewById(R.id.msgText);
+        final EditText editText = (EditText) dialogView.findViewById(R.id.editText);
+        editText.setText("");
+        //msgView.setText(getString(R.string.create));
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.create)
+                .setView(dialogView)
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(R.string.confirm,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                dialog.dismiss();
+                                final int msg = createFolder(editText.getText().toString());
+                                Toast.makeText(ChooseDirectoryActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                .show();
+
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(editText.getText().length() != 0);
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(final CharSequence charSequence, final int i, final int i2, final int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(final CharSequence charSequence, final int i, final int i2, final int i3) {
+                final boolean textNotEmpty = charSequence.length() != 0;
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(textNotEmpty);
+                //msgView.setText(getString(R.string.create_folder_msg, charSequence.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(final Editable editable) {
+
+            }
+        });
+    }
+
+    private int createFolder(String newDirectoryName) {
+        if (newDirectoryName != null && mSelectedDirectory != null
+                && mSelectedDirectory.canWrite()) {
+            final File newDir = new File(mSelectedDirectory, newDirectoryName);
+            if (newDir.exists()) {
+                return R.string.folder_exists;
+            } else {
+                final boolean result = newDir.mkdir();
+                if (result) {
+                    changeDirectory(newDir);
+                    return R.string.create_folder_success;
+                } else {
+                    return R.string.create_folder_fail;
+                }
+            }
+        } else if (mSelectedDirectory != null && !mSelectedDirectory.canWrite()) {
+            return R.string.no_write_access;
+        } else {
+            return R.string.create_folder_fail;
         }
     }
 

@@ -15,7 +15,13 @@
     <string name="back_parent">Back</string>
     <string name="choose_directory">Select</string>
     <string name="refresh">Refresh</string>
-    <string name="create">Create</string>
+    <string name="create">Create folder</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="folder_exists">Folder exists</string>
+    <string name="create_folder_success">Create folder success</string>
+    <string name="create_folder_fail">Create folder fail</string>
+    <string name="no_write_access">No write access</string>
 
     <!-- Strings related to Settings -->
 

@@ -17,6 +17,12 @@
     <string name="choose_directory">选择</string>
     <string name="refresh">刷新</string>
     <string name="create">新建目录</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="folder_exists">目录已存在</string>
+    <string name="create_folder_success">新建目录成功</string>
+    <string name="create_folder_fail">新建目录失败</string>
+    <string name="no_write_access">无写入权限</string>
 
     <!-- Strings related to Settings -->
 
