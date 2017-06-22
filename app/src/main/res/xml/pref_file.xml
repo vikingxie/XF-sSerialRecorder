@@ -6,7 +6,7 @@
         android:summary="@string/pref_description_record_to_file"
         android:title="@string/pref_title_record_to_file" />
 
-    <EditTextPreference
+    <Preference
         android:title="@string/pref_title_file_dir"
         android:key="@string/pref_key_file_dir"
         android:defaultValue="@string/pref_default_file_dir"/>

@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import static com.viking.xfsr.ChooseDirectoryActivity.KEY_DIRECTORY;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -37,6 +39,9 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    public static final String INVALID_PATH_NAME = "~!@#$%^&*()";
+    public static final String DEFAULT_PATH_NAME = "SerialRecord";
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -204,25 +209,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
 
-//        @Override
-//        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-//            if (preference == findPreference("pref_key_file_dir")) {
-//
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("*/*");
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                startActivityForResult(intent, REQ_CHOOSE_DIR);
-//                return true;
-//            }
-//            return super.onPreferenceTreeClick(preferenceScreen, preference);
-//        }
-//
-//        @Override
-//        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            if (requestCode == REQ_CHOOSE_DIR && resultCode == Activity.RESULT_OK) {
-//                Toast.makeText(this.getActivity(), data.getData().getPath(), Toast.LENGTH_LONG).show();
-//            }
-//            super.onActivityResult(requestCode, resultCode, data);
-//        }
+        @Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            if (preference == findPreference(getString(R.string.pref_key_file_dir))) {
+                Intent intent = new Intent(getActivity(), ChooseDirectoryActivity.class);
+                String dir = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_key_file_dir), getString(R.string.pref_default_file_dir));
+                intent.putExtra(KEY_DIRECTORY, dir);
+                startActivityForResult(intent, REQ_CHOOSE_DIR);
+                return true;
+            }
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQ_CHOOSE_DIR && resultCode == Activity.RESULT_OK) {
+                String dir = data.getStringExtra(KEY_DIRECTORY);
+                //Toast.makeText(this.getActivity(), dir, Toast.LENGTH_LONG).show();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString(getString(R.string.pref_key_file_dir), dir).apply();
+                findPreference(getString(R.string.pref_key_file_dir)).setSummary(dir);
+            }
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 }

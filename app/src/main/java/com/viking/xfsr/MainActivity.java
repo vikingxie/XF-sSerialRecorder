@@ -41,6 +41,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.viking.xfsr.SettingsActivity.DEFAULT_PATH_NAME;
+import static com.viking.xfsr.SettingsActivity.INVALID_PATH_NAME;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private UsbManager mUsbManager;
@@ -127,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String record_dir_name = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(getString(R.string.pref_key_file_dir), INVALID_PATH_NAME);
+        if (record_dir_name == INVALID_PATH_NAME) {
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), DEFAULT_PATH_NAME);
+            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString(getString(R.string.pref_key_file_dir), dir.getAbsolutePath()).apply();
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -329,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
         private File recordDir() {
             String path = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(getString(R.string.pref_key_file_dir), getString(R.string.pref_default_file_dir));
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), path);
+            File dir = new File(path);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
                     Toast.makeText(getApplicationContext(), R.string.create_record_dir_fail, Toast.LENGTH_LONG).show();
