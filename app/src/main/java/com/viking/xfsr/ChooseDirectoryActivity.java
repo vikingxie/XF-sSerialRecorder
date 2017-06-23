@@ -80,7 +80,7 @@ public class ChooseDirectoryActivity extends AppCompatActivity {
         mDirectoryList.setAdapter(mListDirectoriesAdapter);
 
         String initDirectoryName = getIntent().getStringExtra(KEY_DIRECTORY);
-        Toast.makeText(this, initDirectoryName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, initDirectoryName, Toast.LENGTH_LONG).show();
         File initDirectory;
         if (!TextUtils.isEmpty(initDirectoryName) && isValidFile(new File(initDirectoryName))) {
             initDirectory = new File(initDirectoryName);

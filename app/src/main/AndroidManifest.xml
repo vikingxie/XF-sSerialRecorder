@@ -40,7 +40,8 @@
         <activity
             android:name=".ChooseDirectoryActivity"
             android:label="@string/title_activity_choose_directory"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
