@@ -13,7 +13,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.viking.xfsr"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
