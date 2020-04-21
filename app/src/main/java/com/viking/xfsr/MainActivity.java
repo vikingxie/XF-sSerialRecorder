@@ -268,11 +268,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class ReaderTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+    }
+
     private class RecordTask extends AsyncTask<Void, Void, Void> {
         private boolean running = false;
         private boolean record_to_file = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(getString(R.string.pref_key_record_to_file), true);
         private int count = 0;
-        private final ByteBuffer mReadBuffer = ByteBuffer.allocate(100000);
+        private final ByteBuffer mReadBuffer = ByteBuffer.allocate(10000);
         private BufferedOutputStream record_file = null;
 
         @Override
@@ -292,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
             while (running) {
                 // Read USB
                 try {
-                    int len = mSerialPort.read(mReadBuffer.array(), 200);
+                    int len = mSerialPort.read(mReadBuffer.array(), 20);
                     if (len > 0) {
                         count += len;
                         final byte[] rx_data = new byte[len];
